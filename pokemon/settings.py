@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from os import getenv as osg
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -82,11 +83,11 @@ WSGI_APPLICATION = 'pokemon.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': '123456789',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': osg('DB_NAME', 'postgres'),
+        'USER': osg('DB_USER', 'postgres'),
+        'PASSWORD': osg('DB_PASSWORD', '123456789'),
+        'HOST': osg('DB_HOST', 'localhost'),
+        'PORT': osg('DB_PORT', '5432'),
         'OPTIONS': {
             'client_encoding': 'UTF8',
         },

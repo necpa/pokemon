@@ -60,10 +60,10 @@ class Type(models.Model):
         db_table = 'types'
 
 class PokemonType(models.Model):
-    id = models.AutoField(primary_key=True)
-    pokemon = models.ForeignKey(Pokemon, on_delete=models.CASCADE)
+    pokemon = models.ForeignKey(Pokemon, on_delete=models.CASCADE, db_column='id', primary_key=True)
     type = models.ForeignKey(Type, on_delete=models.CASCADE)
     slot = models.IntegerField()
 
     class Meta:
         db_table = 'pokemon_types'
+        unique_together = ('pokemon', 'type')
