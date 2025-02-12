@@ -3,8 +3,34 @@ version: '3.9'
 services:
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; python manage.py runserver 0.0.0.0:8000'
     volumes:
       - .:/pokemon_api
     ports:
       - "8000:8000"
+    restart: always
+    environment:
+      - DB_NAME=pokemon
+      - DB_USER=nathanarmanet
+      - DB_PASSWORD=mypassword
+      - DB_HOST=db
+      - DB_PORT=5432
+    depends_on:
+      - db
+
+  db:
+    image: postgres:17
+    container_name: postgres_pokemon
+    restart: always
+    environment:
+      POSTGRES_USER: nathanarmanet
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: pokemon
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  db_data:
